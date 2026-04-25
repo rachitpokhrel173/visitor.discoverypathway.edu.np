@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Your Journey | Discovery Pathway</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0a0a0a;
+  --white: #fafafa;
+  --grey-1: #f0f0f0;
+  --grey-2: #d0d0d0;
+  --grey-3: #999;
+  --grey-4: #555;
+  --error: #c00;
+  --success: #1a7a3a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--white);
+  color: var(--black);
+  min-height: 100vh;
+  cursor: crosshair;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 80px 32px 100px;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--black);
+  width: 0%;
+  transition: width 0.3s ease;
+  z-index: 100;
+}
+
+header {
+  margin-bottom: 72px;
+  animation: slideIn 0.7s ease both;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--grey-3);
+}
+
+header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+header h1 em { font-style: italic; font-weight: 300; }
+
+header p {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--grey-4);
+  line-height: 1.9;
+  max-width: 400px;
+  letter-spacing: 0.3px;
+}
+
+.exam-tag {
+  display: inline-block;
+  border: 1px solid var(--black);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  margin-top: 20px;
+  font-weight: 400;
+}
+
+.rule { width: 100%; height: 1px; background: var(--black); margin-bottom: 48px; }
+.rule-light { width: 100%; height: 1px; background: var(--grey-2); margin: 40px 0; }
+
+.section-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  margin-bottom: 36px;
+}
+
+#lead-form { animation: slideIn 0.7s ease 0.15s both; }
+
+.form-grid { display: grid; gap: 36px; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.field { position: relative; }
+
+.field label {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+
+.field:focus-within label { color: var(--black); }
+
+.field input,
+.field select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--grey-2);
+  border-radius: 0;
+  padding: 0 0 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--black);
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+
+.field input::placeholder { color: var(--grey-2); font-weight: 300; }
+
+.field::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--black);
+  transition: width 0.3s ease;
+}
+
+.field:focus-within::after { width: 100%; }
+
+.field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230a0a0a' stroke-width='1.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px bottom 14px;
+  padding-right: 28px;
+}
+
+.field select option { background: #fff; color: var(--black); }
+
+.field-error {
+  display: none;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--error);
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+.seriousness-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.serious-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  background: transparent;
+  border: 1px solid var(--grey-2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.serious-btn .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--grey-2);
+  transition: color 0.2s;
+}
+
+.serious-btn:hover { border-color: var(--black); color: var(--black); }
+.serious-btn:hover .num { color: var(--black); }
+
+.serious-btn.active {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+
+.serious-btn.active .num { color: var(--white); }
+
+.submit-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.submit-note {
+  font-size: 10px;
+  color: var(--grey-3);
+  letter-spacing: 0.5px;
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+.submit-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 36px;
+  background: var(--black);
+  border: none;
+  color: var(--white);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: crosshair;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--white);
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+}
+
+.submit-btn:hover::before { transform: translateX(0); }
+.submit-btn:hover { color: var(--black); outline: 1px solid var(--black); }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.submit-btn .btn-label,
+.submit-btn .arrow { position: relative; z-index: 1; }
+
+.submit-btn .arrow {
+  font-size: 18px;
+  transition: transform 0.3s;
+}
+
+.submit-btn:not(:disabled):hover .arrow { transform: translateX(6px); }
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* SUCCESS */
+#success-screen { display: none; animation: slideIn 0.6s ease both; }
+
+.success-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 8rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--grey-1);
+  margin-bottom: -20px;
+  letter-spacing: -4px;
+}
+
+.success-header { margin-bottom: 56px; }
+
+.success-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+}
+
+.success-header h2 em { font-style: italic; }
+
+.success-body {
+  font-size: 12px;
+  color: var(--grey-4);
+  line-height: 2;
+  margin-bottom: 48px;
+  max-width: 440px;
+}
+
+.visit-block {
+  border: 1px solid var(--black);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.visit-block-text p {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  margin-bottom: 8px;
+}
+
+.visit-block-text strong {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+}
+
+.map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 24px;
+  white-space: nowrap;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--white);
+  transform: translateX(-101%);
+  transition: transform 0.3s;
+}
+
+.map-btn:hover::before { transform: translateX(0); }
+.map-btn:hover { color: var(--black); outline: 1px solid var(--black); }
+.map-btn span { position: relative; z-index: 1; }
+
+.email-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  color: var(--grey-3);
+  letter-spacing: 1px;
+}
+
+.email-notice::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: blink 2s ease infinite;
+}
+
+.trust-row {
+  display: flex;
+  gap: 32px;
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--grey-2);
+  flex-wrap: wrap;
+  animation: slideIn 0.7s ease 0.3s both;
+}
+
+.trust-item {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trust-item::before { content: '—'; color: var(--grey-2); }
+
+footer {
+  margin-top: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey-3);
+  border-top: 1px solid var(--grey-1);
+  padding-top: 24px;
+  animation: slideIn 0.7s ease 0.4s both;
+}
+
+footer a { color: var(--black); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+@media (max-width: 540px) {
+  .page-wrapper { padding: 48px 20px 72px; }
+  .form-row { grid-template-columns: 1fr; gap: 36px; }
+  .seriousness-grid { grid-template-columns: 1fr 1fr; }
+  header h1 { font-size: 3rem; letter-spacing: -1px; }
+  .submit-wrap { flex-direction: column; align-items: flex-start; }
+  .submit-btn { width: 100%; justify-content: space-between; }
+  .visit-block { flex-direction: column; align-items: flex-start; }
+  .success-num { font-size: 5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<div class="page-wrapper">
+
+  <header>
+    <div class="eyebrow">Discovery Pathway — Banepa</div>
+    <h1>Your Future<br><em>Starts Here.</em></h1>
+    <p>You just finished +2. The world is waiting. One minute is all it takes — tell us your dream and we'll map the path.</p>
+    <div class="exam-tag">+2 Exams Done — Plan Your Abroad Journey Now</div>
+  </header>
+
+  <div class="rule"></div>
+
+  <div class="section-label" id="form-section-label">Student Registration / 01</div>
+
+  <form id="lead-form" novalidate>
+    <div class="form-grid">
+
+      <div class="form-row">
+        <div class="field">
+          <label>Full Name *</label>
+          <input type="text" id="student_name" placeholder="Your full name" autocomplete="name">
+          <div class="field-error" id="err-name">Name required</div>
+        </div>
+        <div class="field">
+          <label>Your Phone *</label>
+          <input type="tel" id="student_phone" placeholder="98XXXXXXXX" maxlength="15">
+          <div class="field-error" id="err-phone">Valid phone required</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Parents' Phone *</label>
+          <input type="tel" id="parent_phone" placeholder="98XXXXXXXX" maxlength="15">
+          <div class="field-error" id="err-parent">Parents' phone required</div>
+        </div>
+        <div class="field">
+          <label>School / College *</label>
+          <input type="text" id="school" placeholder="Your school name">
+          <div class="field-error" id="err-school">School name required</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Email Address *</label>
+          <input type="email" id="student_email" placeholder="your@email.com" autocomplete="email">
+          <div class="field-error" id="err-email">Valid email required</div>
+        </div>
+        <div class="field">
+          <label>Dream Country *</label>
+          <select id="dream_country">
+            <option value="" disabled selected>Select destination</option>
+            <option>Japan</option>
+            <option>South Korea</option>
+            <option>Australia</option>
+            <option>United Kingdom</option>
+            <option>Canada</option>
+            <option>Finland</option>
+            <option>United States</option>
+            <option>Other</option>
+          </select>
+          <div class="field-error" id="err-country">Country required</div>
+        </div>
+      </div>
+
+      <div class="rule-light"></div>
+
+      <div>
+        <div class="section-label" style="margin-bottom:20px">How Serious Are You? / 02</div>
+        <div class="seriousness-grid">
+          <button type="button" class="serious-btn" data-value="Just Exploring">
+            <span class="num">01</span>Just Exploring
+          </button>
+          <button type="button" class="serious-btn" data-value="Pretty Interested">
+            <span class="num">02</span>Pretty Interested
+          </button>
+          <button type="button" class="serious-btn" data-value="Very Serious">
+            <span class="num">03</span>Very Serious
+          </button>
+          <button type="button" class="serious-btn" data-value="100% Ready">
+            <span class="num">04</span>100% Ready
+          </button>
+        </div>
+        <div class="field-error" id="err-serious" style="margin-top:10px">Please select an option</div>
+        <input type="hidden" id="seriousness">
+      </div>
+
+    </div>
+
+    <div class="rule-light"></div>
+
+    <div class="submit-wrap">
+      <p class="submit-note">A confirmation will be sent to your email. Our counsellors will reach out within 24 hours.</p>
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span class="btn-label">Submit</span>
+        <div class="spinner" id="spinner"></div>
+        <span class="arrow">→</span>
+      </button>
+    </div>
+  </form>
+
+  <!-- SUCCESS -->
+  <div id="success-screen">
+    <div class="success-header">
+      <div class="success-num">✓</div>
+      <h2>You're<br><em>Registered.</em></h2>
+    </div>
+    <p class="success-body">
+      Thank you for taking the first step. A confirmation email has been sent to your inbox from banepa@discoveryedu.com.np. Our counsellors will contact you very soon — in the meantime, come meet us in person.
+    </p>
+    <div class="visit-block">
+      <div class="visit-block-text">
+        <p>Visit Us At</p>
+        <strong>Discovery Pathway, Banepa<br>Kavrepalanchok, Nepal</strong>
+      </div>
+      <a href="https://maps.app.goo.gl/nKUsUZfrUo9jTWr8A" target="_blank" class="map-btn">
+        <span>Get Directions →</span>
+      </a>
+    </div>
+    <div class="email-notice">Email confirmation sent to you &amp; our team</div>
+  </div>
+
+  <div class="trust-row" id="trust-row">
+    <div class="trust-item">Secure &amp; Private</div>
+    <div class="trust-item">Instant Email</div>
+    <div class="trust-item">6+ Destinations</div>
+    <div class="trust-item">Verified Consultancy</div>
+  </div>
+
+  <footer>
+    <span>© 2025 Discovery Pathway</span>
+    <a href="https://discoverypathway.edu.np" target="_blank">discoverypathway.edu.np</a>
+  </footer>
+
+</div>
+
+<script>
+const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";
+const TEMPLATE_TO_STUDENT = "YOUR_STUDENT_TEMPLATE_ID";
+const TEMPLATE_TO_TEAM    = "YOUR_TEAM_TEMPLATE_ID";
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+// Progress bar
+const trackedFields = ["student_name","student_phone","parent_phone","school","student_email","dream_country","seriousness"];
+function updateProgress() {
+  let filled = 0;
+  trackedFields.forEach(id => { if ((document.getElementById(id)?.value || "").trim()) filled++; });
+  document.getElementById("progress-bar").style.width = (filled / trackedFields.length * 100) + "%";
+}
+document.getElementById("lead-form").addEventListener("input", updateProgress);
+
+// Seriousness
+document.querySelectorAll(".serious-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".serious-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("seriousness").value = btn.dataset.value;
+    updateProgress();
+  });
+});
+
+// Validate
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = show ? "block" : "none";
+}
+
+function validate() {
+  const n  = document.getElementById("student_name").value.trim();
+  const p  = document.getElementById("student_phone").value.trim();
+  const pp = document.getElementById("parent_phone").value.trim();
+  const sc = document.getElementById("school").value.trim();
+  const e  = document.getElementById("student_email").value.trim();
+  const c  = document.getElementById("dream_country").value;
+  const s  = document.getElementById("seriousness").value;
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+  showErr("err-name",    !n);
+  showErr("err-phone",   !p || p.length < 10);
+  showErr("err-parent",  !pp || pp.length < 10);
+  showErr("err-school",  !sc);
+  showErr("err-email",   !emailOk);
+  showErr("err-country", !c);
+  showErr("err-serious", !s);
+
+  return n && p.length >= 10 && pp.length >= 10 && sc && emailOk && c && s;
+}
+
+// Submit
+document.getElementById("lead-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!validate()) return;
+
+  const btn     = document.getElementById("submit-btn");
+  const spinner = document.getElementById("spinner");
+  const arrow   = btn.querySelector(".arrow");
+  const label   = btn.querySelector(".btn-label");
+
+  btn.disabled = true;
+  label.textContent = "Sending";
+  arrow.style.display = "none";
+  spinner.style.display = "block";
+
+  const params = {
+    student_name  : document.getElementById("student_name").value.trim(),
+    student_phone : document.getElementById("student_phone").value.trim(),
+    parent_phone  : document.getElementById("parent_phone").value.trim(),
+    school        : document.getElementById("school").value.trim(),
+    student_email : document.getElementById("student_email").value.trim(),
+    dream_country : document.getElementById("dream_country").value,
+    seriousness   : document.getElementById("seriousness").value,
+    map_link      : "https://maps.app.goo.gl/nKUsUZfrUo9jTWr8A",
+    office_address: "Discovery Pathway, Banepa, Kavrepalanchok, Nepal",
+    team_email    : "banepa@discoveryedu.com.np"
+  };
+
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_TO_STUDENT, params);
+    await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_TO_TEAM,    params);
+  } catch(err) { console.error("EmailJS:", err); }
+
+  showSuccess();
+});
+
+function showSuccess() {
+  document.getElementById("lead-form").style.display  = "none";
+  document.getElementById("form-section-label").style.display = "none";
+  document.getElementById("success-screen").style.display = "block";
+  document.getElementById("trust-row").style.display  = "none";
+  document.getElementById("progress-bar").style.width = "100%";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+<!--
+EMAILJS SETUP (same as before):
+1. emailjs.com → connect banepa@discoveryedu.com.np → copy Service ID
+2. Create 2 templates — paste Template IDs above
+3. Paste your Public Key above
+Variables: student_name, student_phone, parent_phone, school,
+           student_email, dream_country, seriousness, map_link
+-->
+</body>
+</html>
